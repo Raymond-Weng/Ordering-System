@@ -1,34 +1,42 @@
 import javax.swing.*;
+import java.awt.*;
+import java.awt.datatransfer.StringSelection;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
 
-public class LineNotifySender {
+public class Main {
+    public static Main main;
     public boolean testing = false;
-    public int[] ordered = {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0};
-    public int[] price = {0,0,0,0,0,0,0,0,0};
+    public int[] ordered = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public int[] price = {30, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     /*
      * ordered[2a] = number a with not having tableware
      * ordered[2a+1] = number a with having tableware
      *
      * - team1 (leader:3)
-     * 1. 糖葫蘆
+     * 1. 糖葫蘆（番茄）
+     * 2. 糖葫蘆（番茄+蜜餞）
      *
      * - team2 (leader:21)
-     * 2. 炒泡麵
-     * 3. 炒泡麵（加蛋）
-     * 4. 炒泡麵（加起司）
-     * 5. 炒泡麵（都加）
+     * 3. 炒泡麵
+     * 4. 炒泡麵（加蛋）
+     * 5. 炒泡麵（加起司）
+     * 6. 炒泡麵（都加）
      *
      * - team3 (leader:36)
-     * 6. 三明治
+     * 7. 雞肉三明治
+     * 8. 雞肉三明治（加起司）
+     * 9. 火腿三明治
+     * 10. 火腿三明治（加起司）
      *
      * - team4 (leader:43)
-     * 7. 法式吐司
-     * 8. 可樂
-     * 9. 雪碧
+     * 11. 法式吐司
+     * 12. 可樂
+     * 13. 雪碧
+     * 14. 奶茶
      *
      * ---
      *
@@ -38,11 +46,12 @@ public class LineNotifySender {
     public Frame frame;
 
     public static void main(String[] args) {
-        new LineNotifySender().run();
+        main = new Main();
+        main.run();
     }
 
-    public void run(){
-        if(JOptionPane.showConfirmDialog(null, "請問在Line要輸出測試訊息嗎", "測試Line", JOptionPane.YES_NO_OPTION) == 0){
+    public void run() {
+        if (JOptionPane.showConfirmDialog(null, "請問在Line要輸出測試訊息嗎", "測試Line", JOptionPane.YES_NO_OPTION) == 0) {
             testing = true;
             sendMessage();
         }
@@ -55,10 +64,10 @@ public class LineNotifySender {
             String token = "G3vpb2WkhaUt65qyU41uyLfoTl3EHBRjUXZKNjurQPq"; // 將YOUR_LINE_NOTIFY_TOKEN替換為您的權杖
             String message = "";
 
-            if(testing){
+            if (testing) {
                 message = "\n測試訊息";
                 testing = false;
-            }else{
+            } else {
                 //TODO
             }
 
@@ -80,8 +89,15 @@ public class LineNotifySender {
             int responseCode = connection.getResponseCode();
             connection.disconnect();
 
-            if(responseCode == 200){
-                JOptionPane.showMessageDialog(null, "測試成功");
+            if (responseCode == 200) {
+                JOptionPane.showMessageDialog(null, "發送成功");
+            } else {
+                JOptionPane.showMessageDialog(null, "發送失敗，錯誤代碼"
+                        + responseCode
+                        + "，以下是應發送的訊息：\n訂單:"
+                        + message
+                        + "\n\n訊息自動複製");
+                Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection("訂單:" + message), null);
             }
         } catch (Exception e) {
             e.printStackTrace();
