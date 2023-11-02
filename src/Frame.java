@@ -1,4 +1,5 @@
 import javax.swing.*;
+import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.util.Dictionary;
@@ -38,7 +39,7 @@ public class Frame {
         frame.add(panel3);
         frame.add(jScrollPane);
 
-        panel1.add(new JLabel("載入中..."));
+        panel1.add(new JTextArea("載入中..."));
 
         panel2.setLayout(new GridLayout(2, 2));
         panel2.add(new JButton("更改目前號碼"));
@@ -47,7 +48,7 @@ public class Frame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     number = Integer.parseInt(JOptionPane.showInputDialog("輸入目前號碼"));
-                    ((JLabel) panel1.getComponent(0)).setText("目前號碼：" + ((number < 10) ? "00" + number : (number < 100) ? "0" + number : number));
+                    setLabel();
                 } catch (NumberFormatException numberFormatException) {
                     JOptionPane.showMessageDialog(null, "無法處理資料，請再試一次");
                 }
@@ -99,7 +100,7 @@ public class Frame {
                     button.addActionListener(new AbstractAction() {
                         @Override
                         public void actionPerformed(ActionEvent e) {
-                            System.out.println(buttonDictionary.get(e.getSource()));
+                            order(buttonDictionary.get(e.getSource()));
                         }
                     });
                     buttonDictionary.put(button, count);
@@ -109,13 +110,39 @@ public class Frame {
             }
         }
 
-        panel4.setLayout(new GridLayout(28, 7));
+        panel4.setLayout(new GridLayout(0, 7));
+        panel4.add(new JLabel("編號"));
+        panel4.add(new JLabel("品項"));
+        panel4.add(new JLabel("單價"));
+        panel4.add(new JLabel("數量"));
+        panel4.add(new JLabel("自備餐具"));
+        panel4.add(new JLabel("增加"));
+        panel4.add(new JLabel("減少"));
+        for(int i = 0; i < 7; i++){
+            ((JLabel)panel4.getComponent(i)).setBorder(BorderFactory.createLineBorder(Color.black));
+        }
 
-        ((JLabel) panel1.getComponent(0)).setText("目前號碼：" + ((number < 10) ? "00" + number : (number < 100) ? "0" + number : number));
+        setLabel();
 
         frame.pack();
         frame.setTitle("點餐系統");
         frame.setDefaultCloseOperation(WindowConstants.EXIT_ON_CLOSE);
         frame.setVisible(true);
+    }
+
+    public void order(int number){
+        if(Main.main.ordered[number] == 0){
+            Main.main.ordered[number] = 1;
+            //TODO
+        }else{
+            JOptionPane.showMessageDialog(null, "該餐點已經被點過了");
+        }
+    }
+
+    public void setLabel(){
+        ((JTextArea) panel1.getComponent(0)).setText("目前號碼："
+                + ((number < 10) ? "00" + number : (number < 100) ? "0" + number : number)
+                + "\n\n目前總價："
+                + Main.main.getPriceTotal());
     }
 }

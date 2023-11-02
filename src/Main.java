@@ -5,11 +5,12 @@ import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 public class Main {
     public static Main main;
     public boolean testing = false;
-    public int[] ordered = {0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public int[] ordered;
     public int[] price = {30, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
 
     /*
@@ -51,6 +52,9 @@ public class Main {
     }
 
     public void run() {
+        ordered = new int[price.length * 2];
+        Arrays.fill(ordered, 0);
+
         if (JOptionPane.showConfirmDialog(null, "請問在Line要輸出測試訊息嗎", "測試Line", JOptionPane.YES_NO_OPTION) == 0) {
             testing = true;
             sendMessage();
@@ -100,7 +104,18 @@ public class Main {
                 Toolkit.getDefaultToolkit().getSystemClipboard().setContents(new StringSelection("訂單:" + message), null);
             }
         } catch (Exception e) {
-            e.printStackTrace();
+            JOptionPane.showMessageDialog(null, "發送訊息時產生錯誤");
         }
+    }
+
+    public int getPriceTotal(){
+        int priceTotal = 0;
+
+        for(int i = 0; i < price.length; i++){
+            priceTotal += ordered[i * 2] * price[i];
+            priceTotal += ordered[(i * 2) + 1] * (price[i] - 3);
+        }
+
+        return priceTotal;
     }
 }
