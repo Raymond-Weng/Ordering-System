@@ -1,7 +1,8 @@
 import javax.swing.*;
-import javax.swing.text.JTextComponent;
 import java.awt.*;
 import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
@@ -22,7 +23,10 @@ public class Frame {
     public JPanel panel4;
     public JScrollPane jScrollPane;
 
+    int itemCount = 0;
+
     Dictionary<JButton, Integer> buttonDictionary = new Hashtable<>();
+    Dictionary<JButton, Integer> movingButtons = new Hashtable<>();
 
     public Frame() {
         frame = new JFrame();
@@ -31,7 +35,7 @@ public class Frame {
         panel2 = new JPanel();
         panel3 = new JPanel();
         panel4 = new JPanel();
-        jScrollPane = new JScrollPane(panel4, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_NEVER);
+        jScrollPane = new JScrollPane(panel4, JScrollPane.VERTICAL_SCROLLBAR_ALWAYS, ScrollPaneConstants.HORIZONTAL_SCROLLBAR_ALWAYS);
 
         frame.setLayout(new GridLayout(2, 2));
         frame.add(panel1);
@@ -40,6 +44,9 @@ public class Frame {
         frame.add(jScrollPane);
 
         panel1.add(new JTextArea("載入中..."));
+        panel1.getComponent(0).setFont(new Font(null, Font.PLAIN, 30));
+        ((JTextArea) panel1.getComponent(0)).setEditable(false);
+        panel1.getComponent(0).setFocusable(false);
 
         panel2.setLayout(new GridLayout(2, 2));
         panel2.add(new JButton("更改目前號碼"));
@@ -70,7 +77,7 @@ public class Frame {
                     number = Integer.parseInt(JOptionPane.showInputDialog("輸入按鈕號碼，從零起算"));
                     if (number != 2 && number != 3) {
                         panel3.getComponent(number).setEnabled(!panel3.getComponent(number).isEnabled());
-                    }else{
+                    } else {
                         JOptionPane.showMessageDialog(null, "輸入的資料為空白格，請重新輸入");
                     }
                 } catch (NumberFormatException | ArrayIndexOutOfBoundsException numberFormatException) {
@@ -118,11 +125,15 @@ public class Frame {
         panel4.add(new JLabel("自備餐具"));
         panel4.add(new JLabel("增加"));
         panel4.add(new JLabel("減少"));
-        for(int i = 0; i < 7; i++){
-            ((JLabel)panel4.getComponent(i)).setBorder(BorderFactory.createLineBorder(Color.black));
+        for (int i = 0; i < 7; i++) {
+            ((JLabel) panel4.getComponent(i)).setBorder(BorderFactory.createLineBorder(Color.black));
         }
 
         setLabel();
+        panel1.updateUI();
+        panel2.updateUI();
+        panel3.updateUI();
+        panel4.updateUI();
 
         frame.pack();
         frame.setTitle("點餐系統");
@@ -130,19 +141,102 @@ public class Frame {
         frame.setVisible(true);
     }
 
-    public void order(int number){
-        if(Main.main.ordered[number] == 0){
-            Main.main.ordered[number] = 1;
-            //TODO
-        }else{
+    public void order(int number) {
+        if (Main.main.ordered[number * 2] == 0) {
+            Main.main.ordered[number * 2] = 1;
+            itemCount++;
+            panel4.add(new JLabel(String.valueOf(itemCount)));
+            ((JLabel) panel4.getComponent(itemCount * 7)).setBorder(BorderFactory.createLineBorder(Color.black));
+            panel4.add(new JLabel(ITEMS[(number < 2) ? 0 : (number + 2) / 4][(number < 2) ? number : (number + 2) % 4]));
+            ((JLabel) panel4.getComponent(itemCount * 7 + 1)).setBorder(BorderFactory.createLineBorder(Color.black));
+            panel4.add(new JLabel(String.valueOf(Main.main.price[number])));
+            ((JLabel) panel4.getComponent(itemCount * 7 + 2)).setBorder(BorderFactory.createLineBorder(Color.black));
+            panel4.add(new JLabel("1"));
+            ((JLabel) panel4.getComponent(itemCount * 7 + 3)).setBorder(BorderFactory.createLineBorder(Color.black));
+            panel4.add(new JButton("否"));
+            ((JButton) panel4.getComponent(itemCount * 7 + 4)).addActionListener(new ActionListenerImpl(0, itemCount, number));
+            panel4.add(new JButton("+"));
+            ((JButton)panel4.getComponent(itemCount * 7 + 5)).addActionListener(new ActionListenerImpl(1, itemCount, number));
+            panel4.add(new JButton("-"));
+            ((JButton)panel4.getComponent(itemCount * 7 + 6)).addActionListener(new ActionListenerImpl(2, itemCount, number));
+
+            panel4.updateUI();
+            jScrollPane.updateUI();
+            setLabel();
+        } else {
             JOptionPane.showMessageDialog(null, "該餐點已經被點過了");
         }
     }
 
-    public void setLabel(){
+    public void setLabel() {
         ((JTextArea) panel1.getComponent(0)).setText("目前號碼："
                 + ((number < 10) ? "00" + number : (number < 100) ? "0" + number : number)
                 + "\n\n目前總價："
                 + Main.main.getPriceTotal());
+        System.out.println(Arrays.toString(Main.main.ordered));
+    }
+}
+
+class ActionListenerImpl implements ActionListener{
+
+    int type;
+    public int buttonNumber;
+    public int order;
+
+    public ActionListenerImpl(int type, int buttonNumber, int order){
+        this.type = type;
+        this.buttonNumber = buttonNumber;
+        this.order = order;
+    }
+    @Override
+    public void actionPerformed(ActionEvent e) {
+        switch (type){
+            case 0:
+                if (((JButton) e.getSource()).getText().equals("是")) {
+                    if (Main.main.ordered[order * 2] == 0) {
+                        ((JButton) e.getSource()).setText("否");
+                        ((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).setText(String.valueOf(Integer.parseInt(((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).getText()) + 3));
+                        Main.main.ordered[order * 2] = Main.main.ordered[order * 2 + 1];
+                        Main.main.ordered[order * 2 + 1] = 0;
+                        Main.main.frame.setLabel();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "該餐點無自備餐具的品項已經存在");
+                    }
+                } else {
+                    if (Main.main.ordered[order * 2 + 1] == 0) {
+                        ((JButton) e.getSource()).setText("是");
+                        ((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).setText(String.valueOf(Integer.parseInt(((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).getText()) - 3));
+                        Main.main.ordered[order * 2 + 1] = Main.main.ordered[order * 2];
+                        Main.main.ordered[order * 2] = 0;
+                        Main.main.frame.setLabel();
+                    } else {
+                        JOptionPane.showMessageDialog(null, "該餐點自備餐具的品項已經存在");
+                    }
+                }
+                break;
+            case 1:
+                Main.main.ordered[order * 2 + (((JButton)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] += 1;
+                ((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).setText(String.valueOf(Integer.parseInt(((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).getText()) + 1));
+                Main.main.frame.setLabel();
+                break;
+            case 2:
+                Main.main.ordered[order * 2 + (((JButton)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] -= 1;
+                if(Main.main.ordered[order * 2 + (((JButton)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] == 0){
+                    for(int i = 0; i < 7; i++){
+                        Main.main.frame.panel4.remove(buttonNumber * 7);
+                        Main.main.frame.itemCount--;
+                        for(int r = 1; r < buttonNumber; r++){
+                            for(int k = 0; k < 3; k++){
+                                ((ActionListenerImpl)((JButton)Main.main.frame.panel4.getComponent(r * 7 + 4 + k)).getActionListeners()[0]).buttonNumber--;
+                            }
+                        }
+                        Main.main.frame.panel4.updateUI();
+                    }
+                }else{
+                    ((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).setText(String.valueOf(Integer.parseInt(((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).getText()) - 1));
+                }
+                Main.main.frame.setLabel();
+                break;
+        }
     }
 }
