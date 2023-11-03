@@ -82,7 +82,7 @@ public class Main {
                     }
                 }
                 if (one.isEmpty()) {
-                    one = "無";
+                    one = "無\n";
                 }
                 String two = "";
                 for (int i = 2; i < 2+4; i++) {
@@ -94,7 +94,7 @@ public class Main {
                     }
                 }
                 if (two.isEmpty()) {
-                    two = "無";
+                    two = "無\n";
                 }
                 String three = "";
                 for (int i = 6; i < 6+4; i++) {
@@ -106,7 +106,7 @@ public class Main {
                     }
                 }
                 if (three.isEmpty()) {
-                    three = "無";
+                    three = "無\n";
                 }
                 String four = "";
                 for (int i = 10; i < 10+4; i++) {
