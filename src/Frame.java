@@ -26,7 +26,6 @@ public class Frame {
     int itemCount = 0;
 
     Dictionary<JButton, Integer> buttonDictionary = new Hashtable<>();
-    Dictionary<JButton, Integer> movingButtons = new Hashtable<>();
 
     public Frame() {
         frame = new JFrame();
@@ -91,7 +90,15 @@ public class Frame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "確定要結帳嗎？", "結帳確認", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
-                    System.out.println("ok");
+                    Main.main.sendMessage();
+                    Main.main.ordered = new int[Main.main.price.length * 2];
+                    Arrays.fill(Main.main.ordered, 0);
+                    for(int i = 0; i < itemCount * 7; i++){
+                        panel4.remove(7);
+                    }
+                    itemCount = 0;
+                    number++;
+                    setLabel();
                 }
             }
         });
@@ -224,13 +231,13 @@ class ActionListenerImpl implements ActionListener{
                 if(Main.main.ordered[order * 2 + (((JButton)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] == 0){
                     for(int i = 0; i < 7; i++){
                         Main.main.frame.panel4.remove(buttonNumber * 7);
-                        Main.main.frame.itemCount--;
-                        for(int r = 1; r < buttonNumber; r++){
-                            for(int k = 0; k < 3; k++){
-                                ((ActionListenerImpl)((JButton)Main.main.frame.panel4.getComponent(r * 7 + 4 + k)).getActionListeners()[0]).buttonNumber--;
-                            }
+                    }
+                    Main.main.frame.panel4.updateUI();
+                    Main.main.frame.itemCount--;
+                    for(int r = buttonNumber; r < Main.main.frame.itemCount + 1; r++){
+                        for(int k = 0; k < 3; k++){
+                            ((ActionListenerImpl)((JButton)Main.main.frame.panel4.getComponent(r * 7 + 4 + k)).getActionListeners()[0]).buttonNumber--;
                         }
-                        Main.main.frame.panel4.updateUI();
                     }
                 }else{
                     ((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).setText(String.valueOf(Integer.parseInt(((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).getText()) - 1));

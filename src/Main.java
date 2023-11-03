@@ -11,7 +11,7 @@ public class Main {
     public static Main main;
     public boolean testing = false;
     public int[] ordered;
-    public int[] price = {30, 35, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0};
+    public int[] price = {30, 35, 50, 60, 60, 65, 0, 0, 0, 0, 0, 0, 0, 0};
 
     /*
      * ordered[2a] = number a with not having tableware
@@ -72,7 +72,61 @@ public class Main {
                 message = "\n測試訊息";
                 testing = false;
             } else {
-                //TODO
+                String one = "";
+                for (int i = 0; i < 2; i++) {
+                    if (ordered[i * 2] != 0) {
+                        one = one + Main.main.frame.ITEMS[0][i] + " * " + ordered[i * 2] + "\n";
+                    }
+                    if (ordered[i * 2 + 1] != 0) {
+                        one = one + Main.main.frame.ITEMS[0][i] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
+                    }
+                }
+                if (one.isEmpty()) {
+                    one = "無";
+                }
+                String two = "";
+                for (int i = 2; i < 2+4; i++) {
+                    if (ordered[i * 2] != 0) {
+                        two = two + Main.main.frame.ITEMS[1][i - 2] + " * " + ordered[i * 2] + "\n";
+                    }
+                    if (ordered[i * 2 + 1] != 0) {
+                        two = two + Main.main.frame.ITEMS[1][i - 2] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
+                    }
+                }
+                if (two.isEmpty()) {
+                    two = "無";
+                }
+                String three = "";
+                for (int i = 6; i < 6+4; i++) {
+                    if (ordered[i * 2] != 0) {
+                        three = three + Main.main.frame.ITEMS[2][i - 6] + " * " + ordered[i * 2] + "\n";
+                    }
+                    if (ordered[i * 2 + 1] != 0) {
+                        three = three + Main.main.frame.ITEMS[2][i - 6] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
+                    }
+                }
+                if (three.isEmpty()) {
+                    three = "無";
+                }
+                String four = "";
+                for (int i = 10; i < 10+4; i++) {
+                    if (ordered[i * 2] != 0) {
+                        four = four + Main.main.frame.ITEMS[3][i - 10] + " * " + ordered[i * 2] + "\n";
+                    }
+                    if (ordered[i * 2 + 1] != 0) {
+                        four = four + Main.main.frame.ITEMS[3][i - 10] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
+                    }
+                }
+                if (four.isEmpty()) {
+                    four = "無\n";
+                }
+                message = ((Main.main.frame.number < 10) ? "00" + Main.main.frame.number : (Main.main.frame.number < 100) ? "0" + Main.main.frame.number : Main.main.frame.number)
+                        + "\n第一組點單：\n" + one
+                        + "\n第二組點單：\n" + two
+                        + "\n第三組點單：\n" + three
+                        + "\n第四組點單：\n" + four
+                        + "\n本訂單共" + getPriceTotal() + "元";
+
             }
 
             String url = "https://notify-api.line.me/api/notify";
@@ -105,13 +159,14 @@ public class Main {
             }
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "發送訊息時產生錯誤");
+            e.printStackTrace();
         }
     }
 
-    public int getPriceTotal(){
+    public int getPriceTotal() {
         int priceTotal = 0;
 
-        for(int i = 0; i < price.length; i++){
+        for (int i = 0; i < price.length; i++) {
             priceTotal += ordered[i * 2] * price[i];
             priceTotal += ordered[(i * 2) + 1] * (price[i] - 3);
         }
