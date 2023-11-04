@@ -93,7 +93,7 @@ public class Frame {
                     Main.main.sendMessage();
                     Main.main.ordered = new int[Main.main.price.length * 2];
                     Arrays.fill(Main.main.ordered, 0);
-                    for(int i = 0; i < itemCount * 7; i++){
+                    for (int i = 0; i < itemCount * 7; i++) {
                         panel4.remove(7);
                     }
                     itemCount = 0;
@@ -163,9 +163,9 @@ public class Frame {
             panel4.add(new JButton("否"));
             ((JButton) panel4.getComponent(itemCount * 7 + 4)).addActionListener(new ActionListenerImpl(0, itemCount, number));
             panel4.add(new JButton("+"));
-            ((JButton)panel4.getComponent(itemCount * 7 + 5)).addActionListener(new ActionListenerImpl(1, itemCount, number));
+            ((JButton) panel4.getComponent(itemCount * 7 + 5)).addActionListener(new ActionListenerImpl(1, itemCount, number));
             panel4.add(new JButton("-"));
-            ((JButton)panel4.getComponent(itemCount * 7 + 6)).addActionListener(new ActionListenerImpl(2, itemCount, number));
+            ((JButton) panel4.getComponent(itemCount * 7 + 6)).addActionListener(new ActionListenerImpl(2, itemCount, number));
 
             panel4.updateUI();
             jScrollPane.updateUI();
@@ -176,28 +176,38 @@ public class Frame {
     }
 
     public void setLabel() {
+        //折扣計算
+        String discounts = "";
+        //糖葫蘆3個100
+        if (Main.main.ordered[2] >= 3) {
+            discounts = discounts + "糖葫蘆（番茄+蜜餞）三串100（" + Main.main.ordered[2] / 3 + "次折扣）";
+        }
+
+        //更新
         ((JTextArea) panel1.getComponent(0)).setText("目前號碼："
                 + ((number < 10) ? "00" + number : (number < 100) ? "0" + number : number)
                 + "\n\n目前總價："
-                + Main.main.getPriceTotal());
-        System.out.println(Arrays.toString(Main.main.ordered));
+                + Main.main.getPriceTotal()
+                + "\n\n折扣：\n"
+                + (discounts.isEmpty() ? "無" : discounts));
     }
 }
 
-class ActionListenerImpl implements ActionListener{
+class ActionListenerImpl implements ActionListener {
 
     int type;
     public int buttonNumber;
     public int order;
 
-    public ActionListenerImpl(int type, int buttonNumber, int order){
+    public ActionListenerImpl(int type, int buttonNumber, int order) {
         this.type = type;
         this.buttonNumber = buttonNumber;
         this.order = order;
     }
+
     @Override
     public void actionPerformed(ActionEvent e) {
-        switch (type){
+        switch (type) {
             case 0:
                 if (((JButton) e.getSource()).getText().equals("是")) {
                     if (Main.main.ordered[order * 2] == 0) {
@@ -222,25 +232,25 @@ class ActionListenerImpl implements ActionListener{
                 }
                 break;
             case 1:
-                Main.main.ordered[order * 2 + (((JButton)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] += 1;
-                ((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).setText(String.valueOf(Integer.parseInt(((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).getText()) + 1));
+                Main.main.ordered[order * 2 + (((JButton) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] += 1;
+                ((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).setText(String.valueOf(Integer.parseInt(((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).getText()) + 1));
                 Main.main.frame.setLabel();
                 break;
             case 2:
-                Main.main.ordered[order * 2 + (((JButton)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] -= 1;
-                if(Main.main.ordered[order * 2 + (((JButton)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] == 0){
-                    for(int i = 0; i < 7; i++){
+                Main.main.ordered[order * 2 + (((JButton) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] -= 1;
+                if (Main.main.ordered[order * 2 + (((JButton) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 4)).getText().equals("是") ? 1 : 0)] == 0) {
+                    for (int i = 0; i < 7; i++) {
                         Main.main.frame.panel4.remove(buttonNumber * 7);
                     }
                     Main.main.frame.panel4.updateUI();
                     Main.main.frame.itemCount--;
-                    for(int r = buttonNumber; r < Main.main.frame.itemCount + 1; r++){
-                        for(int k = 0; k < 3; k++){
-                            ((ActionListenerImpl)((JButton)Main.main.frame.panel4.getComponent(r * 7 + 4 + k)).getActionListeners()[0]).buttonNumber--;
+                    for (int r = buttonNumber; r < Main.main.frame.itemCount + 1; r++) {
+                        for (int k = 0; k < 3; k++) {
+                            ((ActionListenerImpl) ((JButton) Main.main.frame.panel4.getComponent(r * 7 + 4 + k)).getActionListeners()[0]).buttonNumber--;
                         }
                     }
-                }else{
-                    ((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).setText(String.valueOf(Integer.parseInt(((JLabel)Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).getText()) - 1));
+                } else {
+                    ((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).setText(String.valueOf(Integer.parseInt(((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 3)).getText()) - 1));
                 }
                 Main.main.frame.setLabel();
                 break;

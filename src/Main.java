@@ -171,6 +171,9 @@ public class Main {
             priceTotal += ordered[(i * 2) + 1] * (price[i] - 3);
         }
 
+        //糖葫蘆加蜜餞三個100
+        priceTotal -= 5 * (ordered[2] / 3);
+
         return priceTotal;
     }
 }
