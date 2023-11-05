@@ -2,17 +2,21 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.Arrays;
 import java.util.Dictionary;
 import java.util.Hashtable;
 
 public class Frame {
-    public String[][] ITEMS = {
+    public final String[][] ITEMS = {
             {"糖葫蘆（番茄）", "糖葫蘆（番茄+蜜餞）", "", ""},
             {"炒泡麵", "炒泡麵（加蛋）", "炒泡麵（加起司）", "炒泡麵（都加）"},
             {"雞肉三明治", "雞肉三明治（加起司）", "火腿三明治", "火腿三明治（加起司）"},
             {"法式吐司", "可樂", "雪碧", "奶茶"}
     };
+
+    public final boolean[] DISCOUNTABLE = {false, false, true, true, true ,true, true, true, true, true, true, true, true, true};
 
     public int number = 0;
 
@@ -91,6 +95,17 @@ public class Frame {
             public void actionPerformed(ActionEvent e) {
                 if (JOptionPane.showConfirmDialog(null, "確定要結帳嗎？", "結帳確認", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     Main.main.sendMessage();
+                    String fileText = "";
+                    for(int i = 0; i < 28; i++){
+                        fileText = fileText + Main.main.ordered[i];
+                        fileText = fileText + (i == 27 ? "\n" : ",");
+                    }
+                    try(FileWriter fileWriter = new FileWriter(Main.main.file, true)) {
+                        fileWriter.append(fileText);
+                    } catch (IOException ex) {
+                        JOptionPane.showMessageDialog(null, "執行時發生錯誤：" + ex.getMessage());
+                        ex.printStackTrace();
+                    }
                     Main.main.ordered = new int[Main.main.price.length * 2];
                     Arrays.fill(Main.main.ordered, 0);
                     for (int i = 0; i < itemCount * 7; i++) {
@@ -160,8 +175,11 @@ public class Frame {
             ((JLabel) panel4.getComponent(itemCount * 7 + 2)).setBorder(BorderFactory.createLineBorder(Color.black));
             panel4.add(new JLabel("1"));
             ((JLabel) panel4.getComponent(itemCount * 7 + 3)).setBorder(BorderFactory.createLineBorder(Color.black));
-            panel4.add(new JButton("否"));
+            panel4.add(new JButton(DISCOUNTABLE[number] ? "否" : "不可用"));
             ((JButton) panel4.getComponent(itemCount * 7 + 4)).addActionListener(new ActionListenerImpl(0, itemCount, number));
+            if(!DISCOUNTABLE[number]){
+                panel4.getComponent(itemCount * 7 + 4).setEnabled(false);
+            }
             panel4.add(new JButton("+"));
             ((JButton) panel4.getComponent(itemCount * 7 + 5)).addActionListener(new ActionListenerImpl(1, itemCount, number));
             panel4.add(new JButton("-"));
@@ -245,6 +263,7 @@ class ActionListenerImpl implements ActionListener {
                     Main.main.frame.panel4.updateUI();
                     Main.main.frame.itemCount--;
                     for (int r = buttonNumber; r < Main.main.frame.itemCount + 1; r++) {
+                        ((JLabel) Main.main.frame.panel4.getComponent(r * 7)).setText(String.valueOf(Integer.parseInt(((JLabel) Main.main.frame.panel4.getComponent(r * 7)).getText()) - 1));
                         for (int k = 0; k < 3; k++) {
                             ((ActionListenerImpl) ((JButton) Main.main.frame.panel4.getComponent(r * 7 + 4 + k)).getActionListeners()[0]).buttonNumber--;
                         }

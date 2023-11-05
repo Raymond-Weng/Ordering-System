@@ -1,17 +1,23 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
+import java.io.File;
+import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.charset.StandardCharsets;
+import java.text.SimpleDateFormat;
 import java.util.Arrays;
+import java.util.Date;
 
 public class Main {
     public static Main main;
     public boolean testing = false;
     public int[] ordered;
     public int[] price = {30, 35, 50, 60, 60, 65, 0, 0, 0, 0, 0, 0, 0, 0};
+
+    public File file = new File("./orders/" + new SimpleDateFormat("MMdd-HHmm").format(new Date()) + ".csv");
 
     /*
      * ordered[2a] = number a with not having tableware
@@ -52,6 +58,12 @@ public class Main {
     }
 
     public void run() {
+        try {
+            file.createNewFile();
+        } catch (IOException e) {
+            JOptionPane.showMessageDialog(null, "執行時發生錯誤：" + e.getMessage());
+            e.printStackTrace();
+        }
         ordered = new int[price.length * 2];
         Arrays.fill(ordered, 0);
 
@@ -85,7 +97,7 @@ public class Main {
                     one = "無\n";
                 }
                 String two = "";
-                for (int i = 2; i < 2+4; i++) {
+                for (int i = 2; i < 2 + 4; i++) {
                     if (ordered[i * 2] != 0) {
                         two = two + Main.main.frame.ITEMS[1][i - 2] + " * " + ordered[i * 2] + "\n";
                     }
@@ -97,7 +109,7 @@ public class Main {
                     two = "無\n";
                 }
                 String three = "";
-                for (int i = 6; i < 6+4; i++) {
+                for (int i = 6; i < 6 + 4; i++) {
                     if (ordered[i * 2] != 0) {
                         three = three + Main.main.frame.ITEMS[2][i - 6] + " * " + ordered[i * 2] + "\n";
                     }
@@ -109,7 +121,7 @@ public class Main {
                     three = "無\n";
                 }
                 String four = "";
-                for (int i = 10; i < 10+4; i++) {
+                for (int i = 10; i < 10 + 4; i++) {
                     if (ordered[i * 2] != 0) {
                         four = four + Main.main.frame.ITEMS[3][i - 10] + " * " + ordered[i * 2] + "\n";
                     }
