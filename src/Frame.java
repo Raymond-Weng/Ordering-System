@@ -10,13 +10,13 @@ import java.util.Hashtable;
 
 public class Frame {
     public final String[][] ITEMS = {
-            {"糖葫蘆（番茄）", "糖葫蘆（番茄+蜜餞）", "", ""},
+            {"糖葫蘆（番茄）", "糖葫蘆（番茄+蜜餞）", "奶茶", ""},
             {"炒泡麵", "炒泡麵（加蛋）", "炒泡麵（加起司）", "炒泡麵（都加）"},
             {"雞肉三明治", "雞肉三明治（加起司）", "火腿三明治", "火腿三明治（加起司）"},
-            {"法式吐司", "奶茶", "", ""}
+            {"蜂蜜法吐", "蜂蜜法吐（+棉花糖）", "煉乳法吐", "煉乳法吐（+棉花糖）"}
     };
 
-    public final boolean[] DISCOUNTABLE = {false, false, true, true, true, true, true, true, true, true, true, true, true, true};
+    public final boolean[] DISCOUNTABLE = {false, false, true, true, true, true, true, true, true, true, true, true, true, true, true};
 
     public int number = 0;
 
@@ -181,7 +181,7 @@ public class Frame {
             itemCount++;
             panel4.add(new JLabel(String.valueOf(itemCount)));
             ((JLabel) panel4.getComponent(itemCount * 7)).setBorder(BorderFactory.createLineBorder(Color.black));
-            panel4.add(new JLabel(ITEMS[(number < 2) ? 0 : (number + 2) / 4][(number < 2) ? number : (number + 2) % 4]));
+            panel4.add(new JLabel(ITEMS[(number < 3) ? 0 : (number + 1) / 4][(number < 3) ? number : (number + 1) % 4]));
             ((JLabel) panel4.getComponent(itemCount * 7 + 1)).setBorder(BorderFactory.createLineBorder(Color.black));
             panel4.add(new JLabel(String.valueOf(Main.main.price[number])));
             ((JLabel) panel4.getComponent(itemCount * 7 + 2)).setBorder(BorderFactory.createLineBorder(Color.black));

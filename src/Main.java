@@ -15,7 +15,7 @@ public class Main {
     public static Main main;
     public boolean testing = false;
     public int[] ordered;
-    public int[] price = {30, 35, 50, 60, 60, 65, 0, 0, 0, 0, 0, 0};
+    public int[] price = {30, 35, 40, 50, 60, 60, 65, 30, 45, 0, 0, 50, 55, 50, 55};
 
     public File file = new File("./orders/" + new SimpleDateFormat("MMdd-HHmm").format(new Date()) + ".csv");
 
@@ -50,7 +50,7 @@ public class Main {
      * ---
      *
      * csv index
-     * 糖葫蘆（番茄）,糖葫蘆（番茄+蜜餞）,炒泡麵,炒泡麵（加蛋）,炒泡麵（加起司）,炒泡麵（都加）,雞肉三明治,雞肉三明治（加起司）,火腿三明治,火腿三明治（加起司）,法式吐司,奶茶,自備餐具,糖葫蘆折扣
+     * 糖葫蘆（番茄）,糖葫蘆（番茄+蜜餞）,奶茶,炒泡麵,炒泡麵（加蛋）,炒泡麵（加起司）,炒泡麵（都加）,雞肉三明治,雞肉三明治（加起司）,火腿三明治,火腿三明治（加起司）,蜂蜜法吐,蜂蜜法吐（+棉花糖）,煉乳法吐,煉乳法吐（+棉花糖）,奶茶,自備餐具,糖葫蘆折扣
      */
 
     public Frame frame;
@@ -100,40 +100,46 @@ public class Main {
                     one = "無\n";
                 }
                 String two = "";
-                for (int i = 2; i < 2 + 4; i++) {
+                for (int i = 3; i < 3 + 4; i++) {
                     if (ordered[i * 2] != 0) {
-                        two = two + Main.main.frame.ITEMS[1][i - 2] + " * " + ordered[i * 2] + "\n";
+                        two = two + Main.main.frame.ITEMS[1][i - 3] + " * " + ordered[i * 2] + "\n";
                     }
                     if (ordered[i * 2 + 1] != 0) {
-                        two = two + Main.main.frame.ITEMS[1][i - 2] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
+                        two = two + Main.main.frame.ITEMS[1][i - 3] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
                     }
                 }
                 if (two.isEmpty()) {
                     two = "無\n";
                 }
                 String three = "";
-                for (int i = 6; i < 6 + 4; i++) {
+                for (int i = 7; i < 7 + 4; i++) {
                     if (ordered[i * 2] != 0) {
-                        three = three + Main.main.frame.ITEMS[2][i - 6] + " * " + ordered[i * 2] + "\n";
+                        three = three + Main.main.frame.ITEMS[2][i - 7] + " * " + ordered[i * 2] + "\n";
                     }
                     if (ordered[i * 2 + 1] != 0) {
-                        three = three + Main.main.frame.ITEMS[2][i - 6] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
+                        three = three + Main.main.frame.ITEMS[2][i - 7] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
                     }
                 }
                 if (three.isEmpty()) {
                     three = "無\n";
                 }
                 String four = "";
-                for (int i = 10; i < 10 + 2; i++) {
+                for (int i = 11; i < 11 + 2; i++) {
                     if (ordered[i * 2] != 0) {
-                        four = four + Main.main.frame.ITEMS[3][i - 10] + " * " + ordered[i * 2] + "\n";
+                        four = four + Main.main.frame.ITEMS[3][i - 11] + " * " + ordered[i * 2] + "\n";
                     }
                     if (ordered[i * 2 + 1] != 0) {
-                        four = four + Main.main.frame.ITEMS[3][i - 10] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
+                        four = four + Main.main.frame.ITEMS[3][i - 11] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
                     }
                 }
                 if (four.isEmpty()) {
                     four = "無\n";
+                }
+                if(ordered[2 * 2] != 0){
+                    four = four + Main.main.frame.ITEMS[0][2] + " * " + ordered[2 * 2] + "\n";
+                }
+                if (ordered[2 * 2 + 1] != 0) {
+                    four = four + Main.main.frame.ITEMS[0][2] + "（自備餐具）* " + ordered[2 * 2 + 1] + "\n";
                 }
                 message = ((Main.main.frame.number < 10) ? "00" + Main.main.frame.number : (Main.main.frame.number < 100) ? "0" + Main.main.frame.number : Main.main.frame.number)
                         + "\n第一組點單：\n" + one
