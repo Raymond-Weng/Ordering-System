@@ -2,7 +2,6 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
-import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -16,7 +15,7 @@ public class Main {
     public static Main main;
     public boolean testing = false;
     public int[] ordered;
-    public int[] price = {30, 35, 50, 60, 60, 65, 0, 0, 0, 0, 0, 0, 0, 0};
+    public int[] price = {30, 35, 50, 60, 60, 65, 0, 0, 0, 0, 0, 0};
 
     public File file = new File("./orders/" + new SimpleDateFormat("MMdd-HHmm").format(new Date()) + ".csv");
 
@@ -42,9 +41,7 @@ public class Main {
      *
      * - team4 (leader:43)
      * 11. 法式吐司
-     * 12. 可樂
-     * 13. 雪碧
-     * 14. 奶茶
+     * 12. 奶茶
      *
      * ---
      *
@@ -53,7 +50,7 @@ public class Main {
      * ---
      *
      * csv index
-     * 糖葫蘆（番茄）,糖葫蘆（番茄+蜜餞）,炒泡麵,炒泡麵（加蛋）,炒泡麵（加起司）,炒泡麵（都加）,雞肉三明治,雞肉三明治（加起司）,火腿三明治,火腿三明治（加起司）,法式吐司,可樂,雪碧,奶茶,自備餐具,糖葫蘆折扣
+     * 糖葫蘆（番茄）,糖葫蘆（番茄+蜜餞）,炒泡麵,炒泡麵（加蛋）,炒泡麵（加起司）,炒泡麵（都加）,雞肉三明治,雞肉三明治（加起司）,火腿三明治,火腿三明治（加起司）,法式吐司,奶茶,自備餐具,糖葫蘆折扣
      */
 
     public Frame frame;
@@ -127,7 +124,7 @@ public class Main {
                     three = "無\n";
                 }
                 String four = "";
-                for (int i = 10; i < 10 + 4; i++) {
+                for (int i = 10; i < 10 + 2; i++) {
                     if (ordered[i * 2] != 0) {
                         four = four + Main.main.frame.ITEMS[3][i - 10] + " * " + ordered[i * 2] + "\n";
                     }
@@ -190,8 +187,8 @@ public class Main {
         }
 
         //自備餐具少3元
-        for(int i = 0; i < price.length; i++){
-            if(ordered[i * 2 + 1] != 0){
+        for (int i = 0; i < price.length; i++) {
+            if (ordered[i * 2 + 1] != 0) {
                 priceTotal -= 3;
                 break;
             }

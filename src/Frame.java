@@ -13,10 +13,10 @@ public class Frame {
             {"糖葫蘆（番茄）", "糖葫蘆（番茄+蜜餞）", "", ""},
             {"炒泡麵", "炒泡麵（加蛋）", "炒泡麵（加起司）", "炒泡麵（都加）"},
             {"雞肉三明治", "雞肉三明治（加起司）", "火腿三明治", "火腿三明治（加起司）"},
-            {"法式吐司", "可樂", "雪碧", "奶茶"}
+            {"法式吐司", "奶茶", "", ""}
     };
 
-    public final boolean[] DISCOUNTABLE = {false, false, true, true, true ,true, true, true, true, true, true, true, true, true};
+    public final boolean[] DISCOUNTABLE = {false, false, true, true, true, true, true, true, true, true, true, true, true, true};
 
     public int number = 0;
 
@@ -96,23 +96,23 @@ public class Frame {
                 if (JOptionPane.showConfirmDialog(null, "確定要結帳嗎？", "結帳確認", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     Main.main.sendMessage();
                     String fileText = "";
-                    for(int i = 0; i < Main.main.price.length; i++){
+                    for (int i = 0; i < Main.main.price.length; i++) {
                         fileText = fileText + (Main.main.ordered[i * 2] + Main.main.ordered[i * 2 + 1]);
                         fileText = fileText + ",";
                     }
 
                     boolean discount = false;
-                    for(int i = 0; i < Main.main.price.length; i++){
-                        if(Main.main.ordered[i * 2 + 1] != 0){
+                    for (int i = 0; i < Main.main.price.length; i++) {
+                        if (Main.main.ordered[i * 2 + 1] != 0) {
                             discount = true;
                         }
                     }
-                    fileText = fileText + (discount ? 1: 0) + ",";
+                    fileText = fileText + (discount ? 1 : 0) + ",";
                     fileText = fileText + (Main.main.ordered[2] / 3);
 
                     fileText = fileText + "\n";
 
-                    try(FileWriter fileWriter = new FileWriter(Main.main.file, true)) {
+                    try (FileWriter fileWriter = new FileWriter(Main.main.file, true)) {
                         fileWriter.append(fileText);
                     } catch (IOException ex) {
                         JOptionPane.showMessageDialog(null, "執行時發生錯誤：" + ex.getMessage());
@@ -189,7 +189,7 @@ public class Frame {
             ((JLabel) panel4.getComponent(itemCount * 7 + 3)).setBorder(BorderFactory.createLineBorder(Color.black));
             panel4.add(new JButton(DISCOUNTABLE[number] ? "否" : "不可用"));
             ((JButton) panel4.getComponent(itemCount * 7 + 4)).addActionListener(new ActionListenerImpl(0, itemCount, number));
-            if(!DISCOUNTABLE[number]){
+            if (!DISCOUNTABLE[number]) {
                 panel4.getComponent(itemCount * 7 + 4).setEnabled(false);
             }
             panel4.add(new JButton("+"));
@@ -209,8 +209,8 @@ public class Frame {
         //折扣計算
         String discounts = "";
         //自備餐具少三元
-        for(int i = 0; i < Main.main.price.length; i++){
-            if(Main.main.ordered[i * 2 + 1] != 0){
+        for (int i = 0; i < Main.main.price.length; i++) {
+            if (Main.main.ordered[i * 2 + 1] != 0) {
                 discounts = discounts + "自備餐具少三元\n";
                 break;
             }
