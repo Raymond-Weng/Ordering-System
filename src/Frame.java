@@ -96,10 +96,22 @@ public class Frame {
                 if (JOptionPane.showConfirmDialog(null, "確定要結帳嗎？", "結帳確認", JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION) {
                     Main.main.sendMessage();
                     String fileText = "";
-                    for(int i = 0; i < 28; i++){
-                        fileText = fileText + Main.main.ordered[i];
-                        fileText = fileText + (i == 27 ? "\n" : ",");
+                    for(int i = 0; i < Main.main.price.length; i++){
+                        fileText = fileText + (Main.main.ordered[i * 2] + Main.main.ordered[i * 2 + 1]);
+                        fileText = fileText + ",";
                     }
+
+                    boolean discount = false;
+                    for(int i = 0; i < Main.main.price.length; i++){
+                        if(Main.main.ordered[i * 2 + 1] != 0){
+                            discount = true;
+                        }
+                    }
+                    fileText = fileText + (discount ? 1: 0);
+                    fileText = fileText + (Main.main.ordered[2] / 3);
+
+                    fileText = fileText + "\n";
+
                     try(FileWriter fileWriter = new FileWriter(Main.main.file, true)) {
                         fileWriter.append(fileText);
                     } catch (IOException ex) {
@@ -196,9 +208,16 @@ public class Frame {
     public void setLabel() {
         //折扣計算
         String discounts = "";
+        //自備餐具少三元
+        for(int i = 0; i < Main.main.price.length; i++){
+            if(Main.main.ordered[i * 2 + 1] != 0){
+                discounts = discounts + "自備餐具少三元\n";
+                break;
+            }
+        }
         //糖葫蘆3個100
         if (Main.main.ordered[2] >= 3) {
-            discounts = discounts + "糖葫蘆（番茄+蜜餞）三串100（" + Main.main.ordered[2] / 3 + "次折扣）";
+            discounts = discounts + "糖葫蘆（番茄+蜜餞）三串100（" + Main.main.ordered[2] / 3 + "次折扣）\n";
         }
 
         //更新
@@ -230,7 +249,6 @@ class ActionListenerImpl implements ActionListener {
                 if (((JButton) e.getSource()).getText().equals("是")) {
                     if (Main.main.ordered[order * 2] == 0) {
                         ((JButton) e.getSource()).setText("否");
-                        ((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).setText(String.valueOf(Integer.parseInt(((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).getText()) + 3));
                         Main.main.ordered[order * 2] = Main.main.ordered[order * 2 + 1];
                         Main.main.ordered[order * 2 + 1] = 0;
                         Main.main.frame.setLabel();
@@ -240,7 +258,6 @@ class ActionListenerImpl implements ActionListener {
                 } else {
                     if (Main.main.ordered[order * 2 + 1] == 0) {
                         ((JButton) e.getSource()).setText("是");
-                        ((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).setText(String.valueOf(Integer.parseInt(((JLabel) Main.main.frame.panel4.getComponent(buttonNumber * 7 + 2)).getText()) - 3));
                         Main.main.ordered[order * 2 + 1] = Main.main.ordered[order * 2];
                         Main.main.ordered[order * 2] = 0;
                         Main.main.frame.setLabel();

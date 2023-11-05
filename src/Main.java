@@ -2,6 +2,7 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.datatransfer.StringSelection;
 import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.HttpURLConnection;
@@ -63,6 +64,12 @@ public class Main {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "執行時發生錯誤：" + e.getMessage());
             e.printStackTrace();
+        }
+        try(FileWriter fileWriter = new FileWriter(file, true)) {
+            fileWriter.append("糖葫蘆（番茄）,糖葫蘆（番茄+蜜餞）,炒泡麵,炒泡麵（加蛋）,炒泡麵（加起司）,炒泡麵（都加）,雞肉三明治,雞肉三明治（加起司）,火腿三明治,火腿三明治（加起司）,法式吐司,可樂,雪碧,奶茶,自備餐具,糖葫蘆折扣");
+        } catch (IOException ex) {
+            JOptionPane.showMessageDialog(null, "執行時發生錯誤：" + ex.getMessage());
+            ex.printStackTrace();
         }
         ordered = new int[price.length * 2];
         Arrays.fill(ordered, 0);
@@ -180,7 +187,15 @@ public class Main {
 
         for (int i = 0; i < price.length; i++) {
             priceTotal += ordered[i * 2] * price[i];
-            priceTotal += ordered[(i * 2) + 1] * (price[i] - 3);
+            priceTotal += ordered[i * 2 + 1] * price[i];
+        }
+
+        //自備餐具少3元
+        for(int i = 0; i < price.length; i++){
+            if(ordered[i * 2 + 1] != 0){
+                priceTotal -= 3;
+                break;
+            }
         }
 
         //糖葫蘆加蜜餞三個100
