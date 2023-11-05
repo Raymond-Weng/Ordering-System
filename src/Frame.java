@@ -107,7 +107,7 @@ public class Frame {
                             discount = true;
                         }
                     }
-                    fileText = fileText + (discount ? 1: 0);
+                    fileText = fileText + (discount ? 1: 0) + ",";
                     fileText = fileText + (Main.main.ordered[2] / 3);
 
                     fileText = fileText + "\n";

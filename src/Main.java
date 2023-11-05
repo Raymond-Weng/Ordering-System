@@ -49,6 +49,11 @@ public class Main {
      * ---
      *
      * price[a] = price of number a
+     *
+     * ---
+     *
+     * csv index
+     * 糖葫蘆（番茄）,糖葫蘆（番茄+蜜餞）,炒泡麵,炒泡麵（加蛋）,炒泡麵（加起司）,炒泡麵（都加）,雞肉三明治,雞肉三明治（加起司）,火腿三明治,火腿三明治（加起司）,法式吐司,可樂,雪碧,奶茶,自備餐具,糖葫蘆折扣
      */
 
     public Frame frame;
@@ -64,12 +69,6 @@ public class Main {
         } catch (IOException e) {
             JOptionPane.showMessageDialog(null, "執行時發生錯誤：" + e.getMessage());
             e.printStackTrace();
-        }
-        try(FileWriter fileWriter = new FileWriter(file, true)) {
-            fileWriter.append("糖葫蘆（番茄）,糖葫蘆（番茄+蜜餞）,炒泡麵,炒泡麵（加蛋）,炒泡麵（加起司）,炒泡麵（都加）,雞肉三明治,雞肉三明治（加起司）,火腿三明治,火腿三明治（加起司）,法式吐司,可樂,雪碧,奶茶,自備餐具,糖葫蘆折扣");
-        } catch (IOException ex) {
-            JOptionPane.showMessageDialog(null, "執行時發生錯誤：" + ex.getMessage());
-            ex.printStackTrace();
         }
         ordered = new int[price.length * 2];
         Arrays.fill(ordered, 0);
