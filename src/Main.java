@@ -124,7 +124,7 @@ public class Main {
                     three = "無\n";
                 }
                 String four = "";
-                for (int i = 11; i < 11 + 2; i++) {
+                for (int i = 11; i < 11 + 4; i++) {
                     if (ordered[i * 2] != 0) {
                         four = four + Main.main.frame.ITEMS[3][i - 11] + " * " + ordered[i * 2] + "\n";
                     }
