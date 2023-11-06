@@ -16,7 +16,7 @@ public class Frame {
             {"蜂蜜法吐", "蜂蜜法吐（+棉花糖）", "煉乳法吐", "煉乳法吐（+棉花糖）"}
     };
 
-    public final boolean[] DISCOUNTABLE = {false, false, true, true, true, true, true, true, true, true, true, true, true, true, true};
+    public final boolean[] DISCOUNTABLE = {false, false, true, true, true, true, true, false, false, false, false, true, true, true, true};
 
     public int number = 0;
 
