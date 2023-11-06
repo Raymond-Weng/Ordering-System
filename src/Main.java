@@ -132,14 +132,14 @@ public class Main {
                         four = four + Main.main.frame.ITEMS[3][i - 11] + "（自備餐具）* " + ordered[i * 2 + 1] + "\n";
                     }
                 }
-                if (four.isEmpty()) {
-                    four = "無\n";
-                }
                 if(ordered[2 * 2] != 0){
                     four = four + Main.main.frame.ITEMS[0][2] + " * " + ordered[2 * 2] + "\n";
                 }
                 if (ordered[2 * 2 + 1] != 0) {
                     four = four + Main.main.frame.ITEMS[0][2] + "（自備餐具）* " + ordered[2 * 2 + 1] + "\n";
+                }
+                if (four.isEmpty()) {
+                    four = "無\n";
                 }
                 message = ((Main.main.frame.number < 10) ? "00" + Main.main.frame.number : (Main.main.frame.number < 100) ? "0" + Main.main.frame.number : Main.main.frame.number)
                         + "\n第一組點單：\n" + one
