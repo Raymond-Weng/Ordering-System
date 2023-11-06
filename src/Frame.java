@@ -78,7 +78,7 @@ public class Frame {
             public void actionPerformed(ActionEvent e) {
                 try {
                     number = Integer.parseInt(JOptionPane.showInputDialog("輸入按鈕號碼，從零起算"));
-                    if (number != 2 && number != 3) {
+                    if (number != 3) {
                         panel3.getComponent(number).setEnabled(!panel3.getComponent(number).isEnabled());
                     } else {
                         JOptionPane.showMessageDialog(null, "輸入的資料為空白格，請重新輸入");
