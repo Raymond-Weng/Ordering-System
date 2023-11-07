@@ -10,7 +10,7 @@ import java.util.Hashtable;
 
 public class Frame {
     public final String[][] ITEMS = {
-            {"糖葫蘆（番茄）", "糖葫蘆（番茄+蜜餞）", "奶茶", ""},
+            {"糖葫蘆（番茄）", "糖葫蘆（番茄+蜜餞）", "鮮奶茶", ""},
             {"炒泡麵", "炒泡麵（加蛋）", "炒泡麵（加起司）", "炒泡麵（都加）"},
             {"雞肉三明治", "雞肉三明治（加起司）", "火腿三明治", "火腿三明治（加起司）"},
             {"蜂蜜法吐", "蜂蜜法吐（+棉花糖）", "煉乳法吐", "煉乳法吐（+棉花糖）"}
@@ -218,6 +218,11 @@ public class Frame {
         //糖葫蘆3個100
         if (Main.main.ordered[2] >= 3) {
             discounts = discounts + "糖葫蘆（番茄+蜜餞）三串100（" + Main.main.ordered[2] / 3 + "次折扣）\n";
+        }
+
+        //43號組
+        if(Math.min(Main.main.ordered[11 * 2] + Main.main.ordered[11 * 2 + 1] + Main.main.ordered[12 * 2] + Main.main.ordered[12 * 2 + 1] + Main.main.ordered[13 * 2] + Main.main.ordered[13 * 2 + 1] + Main.main.ordered[14 * 2] + Main.main.ordered[14 * 2 + 1], Main.main.ordered[2 * 2] + Main.main.ordered[2 * 2 + 1]) != 0){
+            discounts = discounts + "法吐+奶茶套餐80元（" + Math.min(Main.main.ordered[11 * 2] + Main.main.ordered[11 * 2 + 1] + Main.main.ordered[12 * 2] + Main.main.ordered[12 * 2 + 1] + Main.main.ordered[13 * 2] + Main.main.ordered[13 * 2 + 1] + Main.main.ordered[14 * 2] + Main.main.ordered[14 * 2 + 1], Main.main.ordered[2 * 2] + Main.main.ordered[2 * 2 + 1]) + "次折扣）\n";
         }
 
         //更新

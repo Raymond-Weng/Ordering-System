@@ -15,7 +15,7 @@ public class Main {
     public static Main main;
     public boolean testing = false;
     public int[] ordered;
-    public int[] price = {30, 35, 40, 50, 60, 60, 65, 30, 45, 0, 0, 50, 55, 50, 55};
+    public int[] price = {30, 35, 40, 50, 60, 60, 65, 30, 45, 40, 55, 50, 55, 50, 55};
 
     public File file = new File("./orders/" + new SimpleDateFormat("MMdd-HHmm").format(new Date()) + ".csv");
 
@@ -28,20 +28,23 @@ public class Main {
      * 2. 糖葫蘆（番茄+蜜餞）
      *
      * - team2 (leader:21)
-     * 3. 炒泡麵
-     * 4. 炒泡麵（加蛋）
-     * 5. 炒泡麵（加起司）
-     * 6. 炒泡麵（都加）
+     * 4. 炒泡麵
+     * 5. 炒泡麵（加蛋）
+     * 6. 炒泡麵（加起司）
+     * 7. 炒泡麵（都加）
      *
      * - team3 (leader:36)
-     * 7. 雞肉三明治
-     * 8. 雞肉三明治（加起司）
-     * 9. 火腿三明治
-     * 10. 火腿三明治（加起司）
+     * 8. 雞肉三明治
+     * 9. 雞肉三明治（加起司）
+     * 10. 火腿三明治
+     * 11. 火腿三明治（加起司）
      *
      * - team4 (leader:43)
-     * 11. 法式吐司
-     * 12. 奶茶
+     * 12. 蜂蜜法吐
+     * 13. 蜂蜜法吐（+棉花糖）
+     * 14. 煉乳法吐
+     * 15. 煉乳法吐（+棉花糖）
+     * 3. 奶茶
      *
      * ---
      *
@@ -202,6 +205,15 @@ public class Main {
 
         //糖葫蘆加蜜餞三個100
         priceTotal -= 5 * (ordered[2] / 3);
+
+        //43號組套餐
+        int a = Math.min(ordered[11 * 2] + ordered[11 * 2 + 1] + ordered[12 * 2] + ordered[12 * 2 + 1] + ordered[13 * 2] + ordered[13 * 2 + 1] + ordered[14 * 2] + ordered[14 * 2 + 1], ordered[2 * 2] + Main.main.ordered[2 * 2 + 1]);
+        int b = Math.min(ordered[12 * 2] + ordered[12 * 2 + 1] + ordered[14 * 2] + ordered[14 * 2 + 1], ordered[2 * 2] + Main.main.ordered[2 * 2 + 1]);
+        if(a != 0){
+            priceTotal -= b * 15;
+            priceTotal -= (a - b) * 10;
+        }
+        System.out.println(Arrays.toString(ordered));
 
         return priceTotal;
     }
