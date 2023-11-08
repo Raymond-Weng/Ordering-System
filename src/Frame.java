@@ -108,7 +108,11 @@ public class Frame {
                         }
                     }
                     fileText = fileText + (discount ? 1 : 0) + ",";
-                    fileText = fileText + (Main.main.ordered[2] / 3);
+                    fileText = fileText + (Main.main.ordered[2] / 3) + ",";
+                    int a = Math.min(Main.main.ordered[11 * 2] + Main.main.ordered[11 * 2 + 1] + Main.main.ordered[12 * 2] + Main.main.ordered[12 * 2 + 1] + Main.main.ordered[13 * 2] + Main.main.ordered[13 * 2 + 1] + Main.main.ordered[14 * 2] + Main.main.ordered[14 * 2 + 1], Main.main.ordered[2 * 2] + Main.main.ordered[2 * 2 + 1]);
+                    int b = Math.min(Main.main.ordered[12 * 2] + Main.main.ordered[12 * 2 + 1] + Main.main.ordered[14 * 2] + Main.main.ordered[14 * 2 + 1], Main.main.ordered[2 * 2] + Main.main.ordered[2 * 2 + 1]);
+                    fileText = fileText + (a - b) + ",";
+                    fileText = fileText + b;
 
                     fileText = fileText + "\n";
 
